@@ -1,0 +1,34 @@
+name: tunts_challenge_exam
+description: "This project is a response to the exam proposed by tunts.rocks to read a google sheet and present information about students grades"
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  http: ^1.2.0
+  dio: ^5.4.0
+  flutter_bloc: ^8.1.3
+  get_it: ^7.6.7
+  bloc: ^8.1.2
+  meta: ^1.10.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
