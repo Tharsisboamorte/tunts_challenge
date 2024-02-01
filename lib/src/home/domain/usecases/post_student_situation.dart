@@ -1,10 +1,10 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:tunts_challenge_exam/core/usecase/usecase.dart';
 import 'package:tunts_challenge_exam/core/utils/typedef.dart';
 import 'package:tunts_challenge_exam/src/home/domain/repository/class_repository.dart';
 
-class PostStudentSituation extends UseCaseWithParams<void, PostSituationParams> {
+class PostStudentSituation
+    extends UseCaseWithParams<void, PostSituationParams> {
   const PostStudentSituation(this._classRepository);
 
   final ClassRepository _classRepository;
@@ -13,12 +13,15 @@ class PostStudentSituation extends UseCaseWithParams<void, PostSituationParams> 
   ResultVoid call(PostSituationParams params) async =>
       _classRepository.postSituation(
         situation: params.situation,
-        id: params.studentId,
+        studentId: params.studentId,
       );
 }
 
 class PostSituationParams extends Equatable {
-  const PostSituationParams({required this.studentId, required this.situation});
+  const PostSituationParams({
+    required this.studentId,
+    required this.situation,
+  });
 
   final int studentId;
   final String situation;
@@ -26,5 +29,3 @@ class PostSituationParams extends Equatable {
   @override
   List<Object?> get props => [studentId, situation];
 }
-
-

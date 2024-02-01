@@ -8,8 +8,11 @@ abstract class ClassRepository {
 
   ResultVoid postRequiredToPass({
     required int studentId,
-    required String naf
+    required String naf,
   });
 
-  ResultVoid postSituation({required int id, required String situation});
+  ResultVoid postSituation({
+    required int studentId,
+    required String situation,
+  });
 }

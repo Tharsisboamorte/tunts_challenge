@@ -1,6 +1,11 @@
 # tunts_challenge_exam
 
+[![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
+
 This project is a response to the exam proposed by tunts.rocks to read a google sheet and present information about students grades
+Instruções de como instalar o apk ou o exe, a seguir:
+Arquivo exe para usuários que queiram rodar o app no windows: tunts_challenge_exam -> Installers -> tuntsChallengeApp. É recomendado desligar o antivirus apenas para evitar a incoveniência de alerta-lo, o arquivo é 100% seguro
+Arquivo apk para Android: tunts_challenge_exam -> Installers -> app-release. Precisa apenas baixar o arquivo e instalar ele no seu dispositivo android.
 
 ## Getting Started
 

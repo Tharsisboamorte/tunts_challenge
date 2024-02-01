@@ -13,19 +13,6 @@ class StudentModel extends Student {
     required super.naf,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'Matricula': id,
-      'Aluno': studentName,
-      'Faltas': absence,
-      'P1': p1,
-      'P2': p2,
-      'P3': p3,
-      'Situação': situation,
-      'Nota para Aprovação Final': naf,
-    };
-  }
-
   StudentModel.fromMap(DataMap map)
       : super(
           id: (map['Matricula'] as num).toInt(),
@@ -38,7 +25,33 @@ class StudentModel extends Student {
               ? map['Situação'] as String
               : 'Aprovado ',
           naf: map['Nota para Aprovação Final'].toString().isNotEmpty
-              ? map['Nota para Aprovação Final'] as String
+              ? map['Nota para Aprovação Final'].toString()
               : '0',
         );
+
+  const StudentModel.empty()
+      : this(
+    id: 1,
+    studentName: '',
+    naf: '',
+    situation: '',
+    p3: 0,
+    p1: 0,
+    p2: 0,
+    absence: 0,
+  );
+
+
+  Map<String, dynamic> toMap() {
+    return {
+      'Matricula': id,
+      'Aluno': studentName,
+      'Faltas': absence,
+      'P1': p1,
+      'P2': p2,
+      'P3': p3,
+      'Situação': situation,
+      'Nota para Aprovação Final': naf,
+    };
+  }
 }

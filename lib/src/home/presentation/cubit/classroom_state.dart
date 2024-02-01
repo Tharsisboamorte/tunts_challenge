@@ -12,27 +12,37 @@ class ClassroomInitial extends ClassroomState {
   const ClassroomInitial();
 }
 
-class GettingStudentsData extends ClassroomState{
+class GettingStudentsData extends ClassroomState {
   const GettingStudentsData();
 }
 
-class AddingFinalNote extends ClassroomState{
+class AddingFinalNote extends ClassroomState {
   const AddingFinalNote();
 }
 
-class AddedFinalNote extends ClassroomState{
-  const AddedFinalNote();
-}
-
-class AddingSituation extends ClassroomState{
+class AddingSituation extends ClassroomState {
   const AddingSituation();
 }
 
-class ClassroomCreated extends ClassroomState{
-  const ClassroomCreated();
+class AddedSituation extends ClassroomState {
+  const AddedSituation(this.students);
+
+  final List<Student> students;
+
+  @override
+  List<Object> get props => students.map((student) => student.id).toList();
 }
 
-class StudentsLoaded extends ClassroomState{
+class ClassroomCreated extends ClassroomState {
+  const ClassroomCreated(this.students);
+
+  final List<Student> students;
+
+  @override
+  List<Object> get props => students.map((student) => student.id).toList();
+}
+
+class StudentsLoaded extends ClassroomState {
   const StudentsLoaded(this.students);
 
   final List<Student> students;
@@ -41,7 +51,7 @@ class StudentsLoaded extends ClassroomState{
   List<Object> get props => students.map((student) => student.id).toList();
 }
 
-class AuthenticationError extends ClassroomState{
+class AuthenticationError extends ClassroomState {
   const AuthenticationError(this.message);
 
   final String message;

@@ -18,13 +18,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void postFinalNote(List<Student> students) {
-    context
-        .read<ClassroomCubit>()
-        .postStudentFinalNote(students: students);
+    context.read<ClassroomCubit>().postStudentFinalNote(students: students);
   }
 
-  void postSituation(List<Student> students){
-    context.read<ClassroomCubit>();
+  void postSituation(List<Student> students) {
+    context.read<ClassroomCubit>().postStudentSituation(students: students);
   }
 
   @override
@@ -42,33 +40,42 @@ class _HomePageState extends State<HomePage> {
           SnackBar(content: Text(state.message)),
         );
       }
-      if(state is AddedFinalNote) {
-        getStudents();
+      if (state is StudentsLoaded) {
+        postSituation(state.students);
+      }
+      if (state is AddedSituation) {
+        postFinalNote(state.students);
       }
     }, builder: (context, state) {
       return Scaffold(
           backgroundColor: Colors.white,
           body: state is GettingStudentsData
-              ? const LoadingView()
-              : state is StudentsLoaded
+              ? const LoadingView(
+                  message: 'Pegando dados dos estudantes'
+                      ' e fazendo calculos',
+                )
+              : state is ClassroomCreated
                   ? Center(
                       child: ListView.builder(
                         itemCount: state.students.length,
                         itemBuilder: (context, index) {
-                          postFinalNote(state.students);
-
                           final student = state.students[index];
                           return ListTile(
                             title: Text(student.studentName),
                             subtitle: StudentListItem(
                               situation: student.situation,
                               naf: student.naf,
+                              p1: student.p1,
+                              p2: student.p2,
+                              p3: student.p3,
                             ),
                           );
                         },
                       ),
                     )
-                  : const LoadingView());
+                  : const LoadingView(
+                      message: 'Só mais um segundo',
+                    ));
     });
   }
 }

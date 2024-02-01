@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:tunts_challenge_exam/src/home/domain/entity/student.dart';
 import 'package:tunts_challenge_exam/src/home/domain/usecases/get_students_data.dart';
 import 'package:tunts_challenge_exam/src/home/domain/usecases/post_student_final_note.dart';
@@ -39,16 +39,34 @@ class ClassroomCubit extends Cubit<ClassroomState> {
   }) async {
     emit(const AddingFinalNote());
 
-    for (var student in students) {
-      final int m = calculateFinalNote(student);
-      //TODO(PostStudentFinalNote): take calculate off here and implement new BloC
+
+    for (final student in students) {
+      var naf = 0;
+
+      if (student.situation == 'Exame final') {
+        final m = calculateAverageNote(student);
+
+        const desiredResult = 5;
+
+        naf = (desiredResult * 2) - m;
+
+        debugPrint(naf.toString());
+      }
 
       await _postStudentFinalNote(
-        PostStudentParams(studentId: student.id, naf: m.toString()),
+        PostStudentNafParams(
+          studentId: student.id,
+          naf: naf.round().toString(),
+        ),
       );
     }
 
-    emit(const AddedFinalNote());
+    final result = await _getStudentsData();
+
+    result.fold(
+      (failure) => emit(AuthenticationError(failure.errorMessage)),
+      (students) => emit(ClassroomCreated(students)),
+    );
   }
 
   Future<void> postStudentSituation({
@@ -56,38 +74,44 @@ class ClassroomCubit extends Cubit<ClassroomState> {
   }) async {
     emit(const AddingFinalNote());
 
-    for (var student in students) {
-      final int m = calculateAverageNote(student);
+    for (final student in students) {
+      final m = calculateAverageNote(student);
 
-      String situation = '';
+      var situation = '';
 
-      if (m < 5) {
+      final absence = student.absence;
+      const totalNumberOfClasses = 60;
+
+      final percentageLoss = (absence * 100) / totalNumberOfClasses;
+
+      if (percentageLoss.round() > 25) {
+        situation = 'Reprovado por Falta';
+      } else if (m < 5) {
         situation = 'Reprovado por Nota';
       } else if (m >= 5 && m < 7) {
         situation = 'Exame final';
-      } else if (student.absence <= 7) {}
-
-      if (m >= 7) {
+      } else if (m >= 7) {
         situation = 'Aprovado';
       }
 
+      debugPrint(situation);
+      debugPrint(percentageLoss.round().toString());
+
       await _postStudentSituation(
-        PostSituationParams(studentId: student.id, situation: situation),
+        PostSituationParams(
+          studentId: student.id,
+          situation: situation,
+        ),
       );
     }
 
-    emit(const AddedFinalNote());
+    final result = await _getStudentsData();
+
+    result.fold(
+      (failure) => emit(AuthenticationError(failure.errorMessage)),
+      (students) => emit(AddedSituation(students)),
+    );
   }
-}
-
-int calculateFinalNote(Student student) {
-  final m = calculateAverageNote(student);
-
-  double desiredResult = 5;
-
-  double naf = (desiredResult * 2) - m;
-
-  return naf.round();
 }
 
 int calculateAverageNote(Student student) {
@@ -95,7 +119,10 @@ int calculateAverageNote(Student student) {
   final p2 = student.p2;
   final p3 = student.p3;
 
-  final m = p1 + p2 + p3 / 3;
+  var m = (p1 + p2 + p3) / 3;
+  m = m / 10;
+
+  debugPrint(m.round().toString());
 
   return m.round();
 }

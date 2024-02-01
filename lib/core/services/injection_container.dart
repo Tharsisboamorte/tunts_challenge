@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:tunts_challenge_exam/src/home/data/datasources/class_datasource.dart';
 import 'package:tunts_challenge_exam/src/home/data/repos/class_repository_impl.dart';
 import 'package:tunts_challenge_exam/src/home/domain/repository/class_repository.dart';
@@ -20,6 +22,7 @@ Future<void> init() async {
         postStudentSituation: sl(),
       ),
     )
+
     //Use cases
     ..registerLazySingleton(() => GetStudentsData(sl()))
     ..registerLazySingleton(() => PostStudentFinalNote(sl()))
@@ -32,9 +35,10 @@ Future<void> init() async {
 
     //Data Sources
     ..registerLazySingleton<ClassDataSource>(
-      () => ClassRemoteDataSrcImpl(sl()),
+      () => ClassRemoteDataSrcImpl(sl(), sl()),
     )
 
     //External Dependencies
-    ..registerLazySingleton(http.Client.new);
+    ..registerLazySingleton(http.Client.new)
+    ..registerLazySingleton(Dio.new);
 }
